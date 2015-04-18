@@ -2,6 +2,7 @@
   "name" : "brickhack2015",
   "dependencies" : {
     "twilio" : "*",
-    "express" : "*"
+    "express" : "*",
+    "body-parser" : "*"
   }
 }

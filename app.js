@@ -1,15 +1,22 @@
+var accountSid = 'AC4c35deeaa82f3fa0450ca2960607d802';
+var authToken = "c93b4e67ec06e3eda5dbbcb16cfb5fbf";
+
 var express = require('express');
 var app = express();
-var Parser = require('./request-parser');
+var bodyParser = require('body-parser');
+
+var parseRequest = require('./request-parser');
+
+app.use(bodyParser.urlencoded({ extended : false }));
 
 app.get("/", function(req, res) {
   res.send("Hello, world");
 })
 
-app.get("/sms", function(req, res) {
-  console.log(req);
-  console.log(Parser.test(req));
-  res.send("received");
+app.post("/sms/", function(req, res) {
+  var client = new twilio.RestClient(accountSid, authToken);
+
+  console.log(parseRequest(client, req.body));
 });
 
 var server = app.listen(3000, function () {
