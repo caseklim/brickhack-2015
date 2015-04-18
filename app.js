@@ -1,14 +1,17 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
+
 var Parser = require('./request-parser');
+
+app.use(bodyParser.urlencoded({ extended : false }));
 
 app.get("/", function(req, res) {
   res.send("Hello, world");
 })
 
-app.get("/sms", function(req, res) {
-  console.log(req);
-  console.log(Parser.test(req));
+app.post("/sms/", function(req, res) {
+  console.log(Parser.test(req.body));
   res.send("received");
 });
 
