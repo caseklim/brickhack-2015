@@ -1,0 +1,6 @@
+{
+  "name" : "brickhack2015",
+  "dependencies" : {
+    "twilio" : "*"
+  }
+}
