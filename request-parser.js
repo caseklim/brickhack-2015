@@ -1,7 +1,5 @@
-var Parser = {};
-
-Parser.test = function(request) {
+var parseRequest = function(client, request) {
   return "Message from " + request.From + ": " + request.Body;
 }
 
-module.exports = Parser;
+module.exports = parseRequest
