@@ -77,8 +77,63 @@ var parseRequest = function(client, request) {
     getArtistBySongName(client, request);
   else if (body.contains("recommend"))
     getRecommendation(client, request);
+  // else if (body.contains("love") || body.contains("like"))
+  //   sendSongLike(client, request);
+  // else if (body.contains("hate") || body.contains("dislike"))
+  //   sendSongDislike(client, request);
+  else if (body.contains("speak"))
+    setDialect(client, request);
+  // else if (body.contains("can't open"))
+  //   setLinkStyle(client, request);
+  else if (body.contains("thank"))
+    sendYoureWelcome(client, request);
   else
     echoText(client, request);
+};
+
+var sendWelcomeMessage = function(client, request) {
+    client.sendMessage({
+        to: request.From,
+        body: "Welcome to Uncharted!\n" +
+              "We're sending your first recommendation now." +
+              "Send 'recommend' to get more!"
+        from: process.env.TWILIO_NUMBER
+    }, function(err, messageData) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Sent welcome");
+        }
+    });
+};
+
+var setDialect = function(client, request) {
+    var dialect = request.Body.replace("Speak ", "").trim();
+    client.sendMessage({
+        to: request.From,
+        body: getPhrase(dialect,"switch"),
+        from: process.env.TWILIO_NUMBER
+    }, function(err, messageData) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Sent you're welcome");
+        }
+    });
+};
+
+var sendYoureWelcome = function(client, request) {
+    client.sendMessage({
+        to: request.From,
+        body: getPhrase("brah","welcome"),
+        from: process.env.TWILIO_NUMBER
+    }, function(err, messageData) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Sent you're welcome");
+        }
+    });
 };
 
 // A proof-of-concept for connecting all of our APIs
@@ -177,7 +232,12 @@ var sendCommands = function(client, request) {
   client.sendMessage({
     to: request.From,
     from: process.env.TWILIO_NUMBER,
-    body: "Who sings [song name]: tells you who sings a song"
+    body: "'Who sings [song name]?'': tells you who sings a song\n" +
+          "'Recommend a song': Recommends a song based on your profile\n" +
+          "'I loved it': Let us know that you liked a recommendation.\n" +
+          "'I hated it': Let us know that you disliked a recommendation.\n" +
+          "'Speak [dialect]': Tell Uncharted how to talk to you.\n" +
+          "'I can't open that link': Switch link style (for Android users)"
   }, function(err, messageData) {
     if (err) {
       console.log(err);

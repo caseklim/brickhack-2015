@@ -10,6 +10,11 @@
                                 "Sure thing!",
                                 "Anytime!",
                                 "Glad to help!"
+                             ],
+        "switch"           : [
+                                "Thanks for switching!",
+                                "Good choice!",
+                                "Speaking normal to you."
                              ]
     },
     "brah" : {
@@ -25,7 +30,12 @@
         "welcome"          : [
                                 "No problem man",
                                 "Yee brah no probs"
-                             ]
+                             ],
+        "switch"           : [
+                                 "Yooo right onnnn.",
+                                 "You picked right brah.",
+                                 "You da real mvp."
+                              ]
     },
     "annoying" : {
         "haveYouHeardSong" : [
@@ -34,12 +44,17 @@
                              ],
         "whoSings"         : [
                                  "ermmm {0} tots rox {1}",
-                                 " {0} sings {1}?",
-                                 "How could you not know bruh?? {0} sings {1}!"
+                                 "tots think {0} sings {1}",
+                                 "ermaghredddd! {0} sings {1}!!!!!"
                              ],
         "welcome"          : [
-                                "No problem man",
-                                "Yee brah no probs"
-                             ]
+                                "np m8",
+                                "gud pick bff"
+                             ],
+        "switch"           : [
+                                 "lol gr8 choice",
+                                 "mmmmk i guess i can help u",
+                                 "urgh id rather not talk 2 u but i guess"
+                              ]
     }
 }
