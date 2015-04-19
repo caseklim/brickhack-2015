@@ -11,23 +11,67 @@ var echo = echojs({
   key: process.env.ECHONEST_KEY
 });
 
+var requestLib = require('request');
+
 String.prototype.contains = function(s) {
   return this.toLowerCase().indexOf(s.toLowerCase()) != -1;
 };
 
-var genres = [];
+var testGenres = ["a cappella", "college a cappella"];
+var userMap = {};
+var ADVENTUROUSNESS = 1;
 
-var createTasteProfile;
+var createTasteProfile = function(phone) {
+  console.log("Creating taste profile for " + phone);
+
+  echo('tasteprofile/create').post({
+    name: phone,
+    type: 'artist'
+  }, function(err, json) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Json: " + JSON.stringify(json.response.status));
+      userMap[phone] = { "tasteProfileId" : json.response.status.id };
+      console.log(JSON.stringify(userMap));
+      console.log("Created a taste profile for " + phone);
+      updateTasteProfile(phone, testGenres);
+    }
+  });
+};
+
+var updateTasteProfile = function(phone, genres) {
+  echo('tasteprofile/update').post({
+    id: userMap[phone].tasteProfileId,
+    data: toTasteProfileJSON(genres)
+  }, function(err, json) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Updated taste profile for " + phone);
+    }
+  })
+};
+
+var toTasteProfileJSON = function(genres) {
+  var json = [];
+
+  genres.forEach(function(genre) {
+    json.push({ "action" : "update", "item" : { "item_id" : "interest-" + genre, "genre" : genre }});
+  });
+
+  return JSON.stringify(json);
+};
 
 // This is the entry point for all SMS requests
 var parseRequest = function(client, request) {
   var body = request.Body.trim();
 
-  if (body.contains("who sings ") != -1 && request.From == RANDY)
+  if (body.contains("who sings ") && request.From == RANDY)
     trollRandy(client, request);
   else if (body.contains("commands"))
     sendCommands(client, request);
-  else if (body.contains("who sings ") != -1)
+  else if (body.contains("who sings "))
     getArtistBySongName(client, request);
   else if (body.contains("recommend"))
     getRecommendation(client, request);
@@ -50,7 +94,6 @@ var getArtistBySongName = function(client, request) {
 
       var artistName = songs ? songs[0].artist_name : "Nobody";
 
-
       client.sendMessage({
         to: request.From,
         body: dialects.normal.whoSings.format(artistName, songName),
@@ -68,8 +111,46 @@ var getArtistBySongName = function(client, request) {
 };
 
 var getRecommendation = function(client, request) {
-    
-}
+  var url = 'http://developer.echonest.com/api/v4/playlist/static?';
+
+  requestLib({
+    uri: url,
+    method: 'GET',
+    qs: {
+      results: 5,
+      type: 'genre-radio',
+      genre: testGenres,
+      api_key: process.env.ECHONEST_KEY
+    },
+    qsStringify: {
+      indices: false
+    },
+    useQuerystring: true,
+    headers: { 'Content-Type' : 'application/json' }
+    // seed_catalog: userMap[request.From].tasteProfileId,
+    // distriution: 'wandering',
+    // adventurousness: ADVENTUROUSNESS
+  }, function(err, response, body) {
+    if (err) {
+      console.log(err);
+    } else {
+      var json = JSON.parse(body);
+      var song = json.response.songs[Math.floor(Math.random() * 4)];
+
+      client.sendMessage({
+        to: request.From,
+        from: process.env.TWILIO_NUMBER,
+        body: dialects.normal.haveYouHeardSong.format(song)
+      }, function(err, messageData) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Recommendation sent! SID: " + messageData.sid);
+        }
+      });
+    }
+  });
+};
 
 // Echos what the user sent for testing purposes
 var echoText = function(client, request) {
@@ -115,4 +196,5 @@ var trollRandy = function(client, request) {
   });
 };
 
-module.exports = parseRequest;
+exports.parseRequest = parseRequest;
+exports.createTasteProfile = createTasteProfile;

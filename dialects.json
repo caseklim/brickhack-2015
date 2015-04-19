@@ -1,6 +1,6 @@
 {
     "normal" : {
-        "haveYouHeardSong" : "Have you heard of the song {0} by {1}? {2}",
+        "haveYouHeardSong" : "Have you heard of the song {title} by {artist_name}?",
         "whoSings"         : "{0} sings {1}!"
     }
 }

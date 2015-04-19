@@ -3,7 +3,8 @@ var app = express();
 var twilio = require('twilio');
 var bodyParser = require('body-parser');
 
-var parseRequest = require('./request-parser');
+var requestParser = require('./request-parser');
+var parseRequest = requestParser.parseRequest;
 
 app.use(bodyParser.urlencoded({ extended : false }));
 
@@ -28,6 +29,7 @@ var server = app.listen(3000, function () {
 
   var host = server.address().address;
   var port = server.address().port;
+  requestParser.createTasteProfile("+13016414902");
 
   console.log('PiedPiper listening at http://%s:%s', host, port);
 });
