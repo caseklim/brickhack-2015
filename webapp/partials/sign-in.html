@@ -17,14 +17,15 @@
       <div class="col-xs-10 col-xs-offset-1">
         <div class="panel panel-default">
           <div class="panel-body">
-            <form>
+            <div class="alert alert-danger" role="alert" data-ng-if="message">{{ message }}</div>
+            <form name="loginForm">
 	            <div class="form-group">
-	              <input type="email" class="form-control" placeholder="Email address">
+	              <input type="email" class="form-control" placeholder="Email address" data-ng-model="credentials.email" required>
 	            </div>
 	            <div class="form-group">
-	              <input type="password" class="form-control" placeholder="Password">
+	              <input type="password" class="form-control" placeholder="Password" data-ng-model="credentials.password" required>
 	            </div>
-	            <button type="submit" class="btn btn-lg btn-primary sign-up-button">Sign In</button>
+	            <button type="submit" class="btn btn-lg btn-primary sign-up-button" data-ng-click="logIn(loginForm)">Sign In</button>
           	</form>
           </div>
         </div>
