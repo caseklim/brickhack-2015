@@ -1,8 +1,6 @@
-var accountSid = 'AC4c35deeaa82f3fa0450ca2960607d802';
-var authToken = "c93b4e67ec06e3eda5dbbcb16cfb5fbf";
-
 var express = require('express');
 var app = express();
+var twilio = require('twilio');
 var bodyParser = require('body-parser');
 
 var parseRequest = require('./request-parser');
@@ -14,7 +12,8 @@ app.get("/", function(req, res) {
 })
 
 app.post("/sms/", function(req, res) {
-  var client = new twilio.RestClient(accountSid, authToken);
+  var client = new twilio.RestClient(process.env.TWILIO_ACCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN);
 
   console.log(parseRequest(client, req.body));
 });
