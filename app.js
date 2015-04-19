@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended : false }));
 
 app.get("/", function(req, res) {
   res.send("Hello, world");
-})
+});
 
 app.post("/sms/", function(req, res) {
   var client = new twilio.RestClient(process.env.TWILIO_ACCOUNT_SID,
