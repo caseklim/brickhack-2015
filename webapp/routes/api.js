@@ -16,64 +16,11 @@ var authyKey = process.env.AUTHY_API_KEY;
 var authy = require('authy')(authyKey);
 var twilioClient = require('twilio')(accountSid, authToken);
 
-// Define user model schema
-var UserSchema = new mongoose.Schema({
-    countryCode: {
-        type: String,
-        required: true
-    },
-    phone: {
-        type: String,
-        required: true
-    },
-    verified: {
-        type: Boolean,
-        default: false
-    },
-    authyId: String,
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    interests: [
-    	{
-    		genre: String,
-    		frequency: Number
-    	}
-    ]
-});
-
-UserSchema.pre('save', function(next) {
-    var self = this;
-
-    // only hash the password if it has been modified (or is new)
-    if (!self.isModified('password')) return next();
-
-    // generate a salt
-    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-        if (err) return next(err);
-
-        // hash the password using our new salt
-        bcrypt.hash(self.password, salt, function(err, hash) {
-            if (err) return next(err);
-
-            // override the cleartext password with the hashed one
-            self.password = hash;
-            next();
-        });
-    });
-});
-
-// app.post('/users', users.create);
+var User = require('../models/User');
 
 exports.create = function(req, res) {
     var params = req.body;
-    
+    console.log(req);
     // Create a new user based on form parameters
     var user = new User({
         email: params.email,
@@ -107,36 +54,6 @@ exports.create = function(req, res) {
             });
         }
     });
-};
-
-// Send a verification token to this user
-UserSchema.methods.sendAuthyToken = function(cb) {
-    var self = this;
-
-    if (!self.authyId) {
-        // Register this user if it's a new user
-        authy.register_user(self.email, self.phone, self.countryCode, 
-            function(err, response) {
-                
-            if (err || !response.user) return cb.call(self, err);
-            self.authyId = response.user.id;
-            self.save(function(err, doc) {
-                if (err || !doc) return cb.call(self, err);
-                self = doc;
-                sendToken();
-            });
-        });
-    } else {
-        // Otherwise send token to a known user
-        sendToken();
-    }
-
-    // With a valid Authy ID, send the 2FA token for this user
-    function sendToken() {
-        authy.request_sms(self.authyId, true, function(err, response) {
-            cb.call(self, err);
-        });
-    }
 };
 
 // Handle submission of verification token
@@ -191,11 +108,4 @@ exports.verify = function(request, response) {
         request.flash('errors', message);
         response.redirect('/users/'+request.params.id+'/verify');
     }
-};
-
-UserSchema.methods.verifyAuthyToken = function(otp, cb) {
-    var self = this;
-    authy.verify(self.authyId, otp, function(err, response) {
-        cb.call(self, err, response);
-    });
 };

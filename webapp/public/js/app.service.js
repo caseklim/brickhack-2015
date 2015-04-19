@@ -9,10 +9,10 @@ function appService($http) {
     };
 
     this.create = function (user) {
-    	return $http.post('/users', user);
+    	// return $http.post('/users', user);
     };
 
     this.verify = function (token) {
-    	return $http.post('/verify', token);
+    	// return $http.post('/verify', token);
     };
 }
