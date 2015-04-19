@@ -8,7 +8,7 @@ var parseRequest = require('./request-parser');
 app.use(bodyParser.urlencoded({ extended : false }));
 
 app.get("/", function(req, res) {
-  res.send("Hello, world");
+  res.send("<style>@-webkit-keyframes pulse { 0% {background-color: #45CEEF;} 25% {background-color: #FFF5A5;} 50% {background-color: #FFD4DA;} 75% {background-color: #99D2E4;} 100% {background-color: #D8CAB4;} } body { background-color: #45CEEF; -webkit-animation: pulse 40s infinite alternate; }</style>Hi ;)");
 });
 
 app.post("/sms/", function(req, res) {

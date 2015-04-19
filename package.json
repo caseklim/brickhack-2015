@@ -4,6 +4,7 @@
     "twilio" : "*",
     "express" : "*",
     "body-parser" : "*",
-    "echojs" : "*"
+    "echojs" : "*",
+    "string-format" : "*"
   }
 }

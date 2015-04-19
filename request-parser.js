@@ -2,8 +2,8 @@
 var RANDY = "+19143258424";
 var BRIAN = "+13016414902";
 
-// don't forget to to npm install echojs
-// and export your variable!
+var dialects = require('./dialects.json');
+
 var echojs = require('echojs');
 
 var echo = echojs({
@@ -55,9 +55,12 @@ var getArtistBySongName = function(client, request) {
     }, function (err, json) {
       var songs = json.response.songs;
 
+      var artistName = songs ? songs[0].artist_name : "Nobody";
+
+
       client.sendMessage({
         to: request.From,
-        body: (songs ? songs[0].artist_name : " No one ") + " sings " + songName + ".",
+        body: dialects.normal.haveYouHeardSong.format(artistName, songName),
         from: process.env.TWILIO_NUMBER
       }, function(err, messageData) {
         if (err) {
