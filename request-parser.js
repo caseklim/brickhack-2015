@@ -1,3 +1,4 @@
+// Super important constants
 var RANDY = "+19143258424";
 var BRIAN = "+13016414902";
 
@@ -9,17 +10,25 @@ var echo = echojs({
   key: process.env.ECHONEST_KEY
 });
 
-var parseRequest = function(client, request) {
-  var body = request.Body;
+String.prototype.contains = function(s) {
+  return this.toLowerCase().indexOf(s.toLowerCase()) != -1;
+}
 
-  if (body.indexOf("Who sings ") != -1 && request.From == RANDY)
+// This is the entry point for all SMS requests
+var parseRequest = function(client, request) {
+  var body = request.Body.trim();
+
+  if (body.contains("who sings ") != -1 && request.From == RANDY)
     trollRandy(client, request);
-  else if (body.indexOf("Who sings ") != -1)
-    getSongInfo(client, request);
+  else if (body.contains("commands"))
+    sendCommands(client, request);
+  else if (body.contains("who sings ") != -1)
+    getArtistBySongName(client, request);
   else
     echoText(client, request);
 }
 
+// For teh lolz
 var trollRandy = function(client, request) {
   client.sendMessage({
     to: request.From,
@@ -33,8 +42,9 @@ var trollRandy = function(client, request) {
   });
 }
 
-var getSongInfo = function(client, request) {
-    var songName = request.Body.replace("Who sings ", "").replace("?", "");
+// A proof-of-concept for connecting all of our APIs
+var getArtistBySongName = function(client, request) {
+    var songName = request.Body.replace("Who sings ", "").replace("?", "").trim();
     console.log(songName);
 
     // http://developer.echonest.com/docs/v4/song.html#search
@@ -61,6 +71,7 @@ var getSongInfo = function(client, request) {
     });
 }
 
+// Echos what the user sent for testing purposes
 var echoText = function(client, request) {
   client.sendMessage({
     to: request.From,
@@ -71,6 +82,21 @@ var echoText = function(client, request) {
       console.log(err);
     } else {
       console.log("Message sent! SID: " + messageData.sid);
+    }
+  });
+}
+
+// Sends list of commands with short descriptions to user
+var sendCommands = function(client, request) {
+  client.sendMessage({
+    to: request.From,
+    from: process.env.TWILIO_NUMBER,
+    body: "Who sings [song name]: tells you who sings a song"
+  }, function(err, messageData) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Help sent! SID: " + messageData.sid);
     }
   });
 }
