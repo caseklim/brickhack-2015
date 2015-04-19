@@ -1,6 +1,30 @@
 {
     "normal" : {
-        "haveYouHeardSong" : "Have you heard of the song {0} by {1}? {2}",
-        "whoSings"         : "{0} sings {1}!"
+        "haveYouHeardSong" : [
+                                "Have you heard of the song {0} by {1}? {2}"
+                             ],
+        "whoSings"         : [
+                                 "{0} sings {1}!"
+                             ],
+        "thanks"           : [
+                                "Sure thing!",
+                                "Anytime!",
+                                "Glad to help!"
+                             ]
+    },
+    "brah" : {
+        "haveYouHeardSong" : [
+                                "Yooo brah you should check out this sweet track. It's called {0} by {1}. {2}",
+                                "Yoo found this sick track, {0} by {1}. Check it out! {2}"
+                             ],
+        "whoSings"         : [
+                                 "Yo pretty sure {0} sings {1}",
+                                 "I dunno man, maybe {0} sings {1}?",
+                                 "How could you not know bruh?? {0} sings {1}!"
+                             ],
+        "thanks"           : [
+                                "No problem man",
+                                "Yee brah no probs"
+                             ]
     }
 }
