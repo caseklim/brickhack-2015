@@ -11,23 +11,28 @@ function RegistrationController($scope, $location, appService) {
 	$scope.submitted = false;
 
 	$scope.signUp = function (form) {
-        $scope.submitted = true;
-
         if (form.$invalid) {
         	if (form.$error.email) {
-        		$scope.message = 'Please enter a valid email.';
+        		$scope.message = {
+        			type: 'danger',
+        			content: 'That\'s not a valid email.'
+        		};
         	} else if (form.$error.required) {
-        		$scope.message = 'Please enter provide a value for both inputs.';
+        		$scope.message = {
+        			type: 'danger',
+        			content: 'Please enter provide a value for both inputs.'
+        		};
         	}
             return;
         }
 
         if ($scope.newUserCredentials.email == 'cklimkowsky@gmail.com') {
-        	$scope.message = 'That email address is already in use.';
+        	$scope.message = {
+    			type: 'danger',
+    			content: 'That email is already in use.'
+    		};
         	return;
-        } else {
-        	$scope.submitted = false;
-        }
+        } 
 
         $location.path('/sign-up/mobile-number');
 	};
@@ -36,9 +41,40 @@ function RegistrationController($scope, $location, appService) {
 	// Mobile phone
 	//
 
-	$scope.savePhoneNumber = function () {
-		newUserCredentials.phoneNumber = $scope.phoneNumber;
-		$location.path('/sign-up/music-preferences');
+	$scope.token = null;
+	$scope.verified = false;
+
+	$scope.savePhoneNumber = function (form) {
+		if ($scope.newUserCredentials.phoneNumber) {
+			var phoneRe = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/
+	  		var digits = $scope.newUserCredentials.phoneNumber.replace(/\D/g, '');
+	  		if (digits.match(phoneRe) == null) {
+	  			$scope.message = {
+        			type: 'danger',
+        			content: 'That\'s not a valid phone number.'
+        		};
+	  			return;
+			}
+		}
+
+		if (form.$error.required) {
+        	$scope.message = {
+    			type: 'danger',
+    			content: 'Please enter a phone number.'
+    		};
+            return;
+        }
+
+		$scope.message = null;
+		$scope.submitted = true;
+	};
+
+	$scope.verify = function () {
+		$scope.verified = true;
+		$scope.message = {
+			type: 'success',
+			content: 'You\'re all set! Click the button to continue.'
+		};
 	};
 
 	//
@@ -71,8 +107,9 @@ function RegistrationController($scope, $location, appService) {
 	$scope.finishRegistration = function () {
 		$scope.newUserCredentials.genres = $scope.selectedGenres;
 
-		console.log($scope.newUserCredentials);
-
-		$location.path('/sign-up/finish');
+		appService.storeUserInformation($scope.newUserCredentials)
+			.success(function (result) {
+				$location.path('/sign-up/finish');
+			});
 	}
 }

@@ -15,7 +15,7 @@
 
 <!-- Phone Number -->
 <section class="sign-up-form">
-  <div class="container">
+  <div class="container" data-ng-if="!submitted">
     <div class="row text-center">
       <div class="col-xs-10 col-xs-offset-1">
         <p class="lead tagline">What's your mobile number?</p>
@@ -26,11 +26,36 @@
       <div class="col-xs-10 col-xs-offset-1">
         <div class="panel panel-default">
           <div class="panel-body">
+            <alert type="{{ message.type }}" data-ng-if="message">{{ message.content }}</alert>
+            <form name="phoneInput">
+              <div class="form-group">
+                <input type="tel" class="form-control" placeholder="Example: (123) 456-7890" data-ng-model="newUserCredentials.phoneNumber" required>
+              </div>
+              <button type="submit" class="btn btn-lg btn-primary sign-up-button" data-ng-click="savePhoneNumber(phoneInput)">Continue</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container" data-ng-if="submitted">
+    <div class="row text-center">
+      <div class="col-xs-10 col-xs-offset-1">
+        <p class="lead tagline">Enter verification code</p>
+        <p class="lead">We've sent you a code to verify your phone number.</p>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col-xs-10 col-xs-offset-1">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <alert type="{{ message.type }}" data-ng-if="message">{{ message.content }}</alert>
             <form>
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Example: (123) 456-7890" data-ng-model="newUserCredentials.phoneNumber">
+                <input type="text" class="form-control" placeholder="Example: 12345" data-ng-model="token" required>
               </div>
-              <a href="#/sign-up/music-preferences"><button type="submit" class="btn btn-lg btn-primary sign-up-button">Continue</button></a>
+              <button type="submit" class="btn btn-lg btn-primary sign-up-button" data-ng-click="verify(phoneInput)" data-ng-if="!verified">Verify</button>
+              <a href="#/sign-up/music-preferences"><button class="btn btn-lg btn-primary sign-up-button" data-ng-if="verified">Continue</button></a>
             </form>
           </div>
         </div>

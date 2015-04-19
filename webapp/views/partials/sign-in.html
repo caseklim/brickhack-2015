@@ -17,7 +17,7 @@
       <div class="col-xs-10 col-xs-offset-1">
         <div class="panel panel-default">
           <div class="panel-body">
-            <div class="alert alert-danger" role="alert" data-ng-if="message">{{ message }}</div>
+            <alert type="{{ message.type }}" data-ng-if="message">{{ message.content }}</alert>
             <form name="loginForm">
 	            <div class="form-group">
 	              <input type="email" class="form-control" placeholder="Email address" data-ng-model="credentials.email" required>
