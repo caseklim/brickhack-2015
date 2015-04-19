@@ -15,6 +15,10 @@ String.prototype.contains = function(s) {
   return this.toLowerCase().indexOf(s.toLowerCase()) != -1;
 };
 
+var genres = [];
+
+var createTasteProfile;
+
 // This is the entry point for all SMS requests
 var parseRequest = function(client, request) {
   var body = request.Body.trim();
