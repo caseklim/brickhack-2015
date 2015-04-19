@@ -83,16 +83,16 @@ var parseRequest = function(client, request) {
 
   // if (!userMap[request.From])
     createTasteProfile(client, request);
-  if (body.contains("who sings ") && request.From == RANDY)
-    trollRandy(client, request);
-  else if (body.contains("commands"))
-    sendCommands(client, request);
-  else if (body.contains("who sings "))
-    getArtistBySongName(client, request);
-  else if (body.contains("recommend"))
-    getRecommendation(client, request);
-  else
-    echoText(client, request);
+  // if (body.contains("who sings ") && request.From == RANDY)
+  //   trollRandy(client, request);
+  // else if (body.contains("commands"))
+  //   sendCommands(client, request);
+  // else if (body.contains("who sings "))
+  //   getArtistBySongName(client, request);
+  // else if (body.contains("recommend"))
+  //   getRecommendation(client, request);
+  // else
+  //   echoText(client, request);
 };
 
 // A proof-of-concept for connecting all of our APIs

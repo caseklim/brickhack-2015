@@ -19,13 +19,13 @@ var twilioClient = require('twilio')(accountSid, authToken);
 var User = require('../models/User');
 
 exports.getUser = function(req, res) {
-   User.findOne({ 'phone' : phoneString});
+   User.findOne({ 'phone' : req.body });
 };
 
 exports.create = function(req, res) {
     /*
     var params = req.body;
-    
+
     // Create a new user based on form parameters
     var user = new User({
         email: params.email,
@@ -62,7 +62,7 @@ exports.create = function(req, res) {
     */
 
     var params = req.body;
-    
+
     // Create a new user based on form parameters
     var user = new User({
         email: params.email,
@@ -105,7 +105,7 @@ exports.create = function(req, res) {
                 res.redirect('/users/'+doc._id+'/verify');
             });
             */
-            
+
             // res.redirect('/sign-up/finish');
             var response = {
                 status: 200,
