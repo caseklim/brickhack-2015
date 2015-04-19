@@ -1,7 +1,7 @@
 <!-- Header -->
 <header class="sign-up">
     <div class="text-center">
-        <h1><a href="#/">Uncharted</a></h1>
+        <a href="#/"><img class="logo" src="img/logo.png"></a>
     </div>
 </header>
 
@@ -30,13 +30,13 @@
               <p class="lead" data-ng-if="selectedGenres.length == 0">Selected Genres: None yet!</p>
               <p class="lead" data-ng-if="selectedGenres.length > 0">Selected Genres:</p>
               <h2 class="music-labels" data-ng-if="selectedGenres.length > 0">
-                <span data-ng-repeat="genre in selectedGenres" class="label label-info">{{ genre.name }} 
+                <span data-ng-repeat="genre in selectedGenres" class="label label-warning">{{ genre.name }} 
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-ng-click="removeGenre(genre)">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </span>
               </h2>
-              <button type="submit" class="btn btn-lg btn-primary sign-up-button" data-ng-click="finishRegistration()">Finish</button>
+              <button type="submit" class="btn btn-lg btn-info sign-up-button" data-ng-click="finishRegistration()">Finish</button>
           </div>
         </div>
       </div>
