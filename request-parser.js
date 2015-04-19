@@ -136,11 +136,12 @@ var getRecommendation = function(client, request) {
     } else {
       var json = JSON.parse(body);
       var song = json.response.songs[Math.floor(Math.random() * 4)];
+      song.spotifyUrl = "www.spotify.cool";
 
       client.sendMessage({
         to: request.From,
         from: process.env.TWILIO_NUMBER,
-        body: dialects.normal.haveYouHeardSong.format(song)
+        body: getPhrase("brah","haveYouHeardSong").format(song)
       }, function(err, messageData) {
         if (err) {
           console.log(err);

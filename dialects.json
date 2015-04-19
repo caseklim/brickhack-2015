@@ -1,7 +1,7 @@
 {
     "normal" : {
         "haveYouHeardSong" : [
-                                "Have you heard of the song {0} by {1}? {2}"
+                                "Have you heard of the song {title} by {artist_name}? {spotifyUrl}"
                              ],
         "whoSings"         : [
                                  "{0} sings {1}!"
@@ -14,8 +14,8 @@
     },
     "brah" : {
         "haveYouHeardSong" : [
-                                "Yooo brah you should check out this sweet track. It's called {0} by {1}. {2}",
-                                "Yoo found this sick track, {0} by {1}. Check it out! {2}"
+                                "Yooo brah you should check out this sweet track. It's called {title} by {artist_name}. {spotifyUrl}",
+                                "Yoo found this sick track, {title} by {artist_name}. Check it out! {spotifyUrl}"
                              ],
         "whoSings"         : [
                                  "Yo pretty sure {0} sings {1}",
@@ -29,8 +29,8 @@
     },
     "annoying" : {
         "haveYouHeardSong" : [
-                                "tots check out {0} by {1}. {2}",
-                                "u heard {0} by {1}? pretty sw33t {2}"
+                                "tots check out {title} by {artist_name}. {spotifyUrl}",
+                                "u heard {title} by {artist_name}? pretty sw33t {spotifyUrl}"
                              ],
         "whoSings"         : [
                                  "ermmm {0} tots rox {1}",
