@@ -26,7 +26,7 @@ var createTasteProfile = function(phone) {
 
   echo('tasteprofile/create').post({
     name: phone,
-    type: 'artist'
+    type: 'song'
   }, function(err, json) {
     if (err) {
       console.log(err);
@@ -66,6 +66,8 @@ var toTasteProfileJSON = function(genres) {
 // This is the entry point for all SMS requests
 var parseRequest = function(client, request) {
   var body = request.Body.trim();
+
+  createTasteProfile(request.From);
 
   if (body.contains("who sings ") && request.From == RANDY)
     trollRandy(client, request);
@@ -120,6 +122,7 @@ var getRecommendation = function(client, request) {
       results: 5,
       type: 'genre-radio',
       genre: testGenres,
+      bucket: ["id:spotify", "tracks"],
       api_key: process.env.ECHONEST_KEY
     },
     qsStringify: {
@@ -136,7 +139,8 @@ var getRecommendation = function(client, request) {
     } else {
       var json = JSON.parse(body);
       var song = json.response.songs[Math.floor(Math.random() * 4)];
-      song.spotifyUrl = "www.spotify.cool";
+      var songId = song.tracks[0].foreign_id.replace("spotify:track:", "");
+      song.spotifyUrl = 'spotify://track/' + songId;
 
       client.sendMessage({
         to: request.From,
