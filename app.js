@@ -1,35 +1,65 @@
-var express = require('express');
-var app = express();
-var twilio = require('twilio');
-var bodyParser = require('body-parser');
+/**
+ * Module dependencies
+ */
 
-var requestParser = require('./request-parser');
-var parseRequest = requestParser.parseRequest;
+var express         = require('express'),
+    routes          = require('./routes'),
+    api             = require('./routes/api'),
+    http            = require('http'),
+    path            = require('path'),
+    twilio          = require('twilio'),
+    bodyParser      = require('body-parser'),
+    parseRequest    = require('./request-parser');
 
-app.use(bodyParser.urlencoded({ extended : false }));
+var app = module.exports = express();
 
-app.get("/", function(req, res) {
-  res.send("<style>@-webkit-keyframes pulse { 0% {background-color: #45CEEF;} 25% {background-color: #FFF5A5;} 50% {background-color: #FFD4DA;} 75% {background-color: #99D2E4;} 100% {background-color: #D8CAB4;} } body { background-color: #45CEEF; -webkit-animation: pulse 40s infinite alternate; }</style>Hi ;)");
-});
 
-app.post("/sms/", function(req, res) {
+/**
+ * Configuration
+ */
+app.use(bodyParser.urlencoded({ extended : true }));
+app.use(bodyParser.json());
+
+// All environments
+app.set('port', process.env.PORT || 8080);
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+/**
+ * Routes
+ */
+
+// Serve index and view partials
+app.get('/', routes.index);
+app.get('/partials/:name', routes.partials);
+
+// Configure queries to the database
+app.post('/users', api.create);
+app.post('/verify', api.verify);
+
+app.post("/sms", function(req, res) {
   var client = new twilio.RestClient(process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_AUTH_TOKEN);
 
   parseRequest(client, req.body);
 });
-app.post("/create/", function(req, res) {
-  // TODO: create new user profile
-  // 1. save phone number
-  // 2. create taste profile
-  // 3. update taste profile with genres
-});
 
-var server = app.listen(3000, function () {
+// Redirect all others to the index (HTML5 history)
+app.get('*', routes.index);
+
+
+/**
+ * Start Server
+ */
+
+var server = app.listen(app.get('port'), function () {
 
   var host = server.address().address;
   var port = server.address().port;
-  requestParser.createTasteProfile("+13016414902");
 
-  console.log('PiedPiper listening at http://%s:%s', host, port);
+  console.log('Piper listening at http://%s:%s', host, port);
+
 });

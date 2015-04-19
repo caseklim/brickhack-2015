@@ -22,9 +22,26 @@ input.form-control {
     border-radius: 0;
 }
 
+a {
+    color: #5bc0de;
+}
+
+a:hover,
+a:focus,
+a:active {
+    color: #00b1d2;
+}
+
 .alert {
     font-size: 24px;
     font-weight: 300;
+}
+
+
+.dropdown-menu {
+    width: 250px;
+    height: 332px;
+    overflow: scroll;
 }
 
 .dropdown-menu > li > a {
@@ -37,6 +54,11 @@ input.form-control {
 
 .close {
     float: none;
+}
+
+.logo {
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .text-vertical-center {

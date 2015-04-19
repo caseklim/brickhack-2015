@@ -196,5 +196,4 @@ var trollRandy = function(client, request) {
   });
 };
 
-exports.parseRequest = parseRequest;
-exports.createTasteProfile = createTasteProfile;
+module.exports = parseRequest;

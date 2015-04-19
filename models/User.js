@@ -14,11 +14,11 @@ var SALT_WORK_FACTOR = 10;
 var UserSchema = new mongoose.Schema({
     countryCode: {
         type: String,
-        required: true
+        required: false
     },
     phone: {
         type: String,
-        required: true
+        required: false
     },
     verified: {
         type: Boolean,
@@ -27,12 +27,12 @@ var UserSchema = new mongoose.Schema({
     authyId: String,
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: false,
+        unique: false
     },
     password: {
         type: String,
-        required: true
+        required: false
     },
     interests: [
         {
@@ -44,6 +44,7 @@ var UserSchema = new mongoose.Schema({
 
 // Middleware executed before save - hash the user's password
 UserSchema.pre('save', function(next) {
+    /*
     var self = this;
 
     // only hash the password if it has been modified (or is new)
@@ -62,6 +63,8 @@ UserSchema.pre('save', function(next) {
             next();
         });
     });
+    */
+    next();
 });
 
 // Test candidate password

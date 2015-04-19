@@ -1,5 +1,5 @@
 var mongoose = require('mongoose')
-mongoose.connect('129.21.114.52:27017');
+mongoose.connect('129.21.114.52:27017/BRICKHACK');
 
 var conn = mongoose.connection;
 
@@ -19,8 +19,9 @@ var twilioClient = require('twilio')(accountSid, authToken);
 var User = require('../models/User');
 
 exports.create = function(req, res) {
+    /*
     var params = req.body;
-    console.log(req);
+    
     // Create a new user based on form parameters
     var user = new User({
         email: params.email,
@@ -52,6 +53,62 @@ exports.create = function(req, res) {
                 // Send to token verification page
                 res.redirect('/users/'+doc._id+'/verify');
             });
+        }
+    });
+    */
+
+    var params = req.body;
+    
+    // Create a new user based on form parameters
+    var user = new User({
+        email: params.email,
+        phone: params.phoneNumber,
+        password: params.password,
+        interests: []
+    });
+
+    for (var i = 0; i < params.genres.length; i++) {
+        user.interests.push({
+            genre: params.genres[i].name,
+            frequency: 0
+        });
+    };
+
+    console.log(user);
+
+    user.save(function(err, doc) {
+        if (err) {
+            // To improve on this example, you should include a better
+            // error message, especially around form field validation. But
+            // for now, just indicate that the save operation failed
+            /*
+            req.flash('errors', 'There was a problem creating your'
+                + ' account - note that all fields are required. Please'
+                + ' double-check your input and try again.');
+            */
+            console.log(err);
+        } else {
+            // If the user is created successfully, send them an account
+            // verification token
+            /*
+            user.sendAuthyToken(function(err) {
+                if (err) {
+                    request.flash('errors', 'There was a problem sending '
+                        + 'your token - sorry :(');
+                }
+
+                // Send to token verification page
+                res.redirect('/users/'+doc._id+'/verify');
+            });
+            */
+            
+            // res.redirect('/sign-up/finish');
+            var response = {
+                status: 200,
+                success: ''
+            }
+
+            res.end(JSON.stringify(response));
         }
     });
 };
