@@ -39,6 +39,7 @@ app.get('/partials/:name', routes.partials);
 // Configure queries to the database
 app.post('/users', api.create);
 app.post('/verify', api.verify);
+app.get('/user', api.getUser)
 
 app.post("/sms", function(req, res) {
   var client = new twilio.RestClient(process.env.TWILIO_ACCOUNT_SID,
