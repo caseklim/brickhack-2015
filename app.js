@@ -17,7 +17,8 @@ var app = module.exports = express();
 /**
  * Configuration
  */
-app.use(bodyParser.urlencoded({ extended : false }));
+app.use(bodyParser.urlencoded({ extended : true }));
+app.use(bodyParser.json());
 
 // All environments
 app.set('port', process.env.PORT || 8080);

@@ -26,7 +26,7 @@ function RegistrationController($scope, $location, appService) {
             return;
         }
 
-        if ($scope.newUserCredentials.email == 'cklimkowsky@gmail.com') {
+        if (false) {
         	$scope.message = {
     			type: 'danger',
     			content: 'That email is already in use.'
@@ -107,9 +107,11 @@ function RegistrationController($scope, $location, appService) {
 	$scope.finishRegistration = function () {
 		$scope.newUserCredentials.genres = $scope.selectedGenres;
 
-		appService.storeUserInformation($scope.newUserCredentials)
+		appService.create($scope.newUserCredentials)
 			.success(function (result) {
 				$location.path('/sign-up/finish');
+			}).error(function (result) {
+				console.log(result);
 			});
 	}
 }
