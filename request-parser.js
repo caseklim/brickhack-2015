@@ -36,20 +36,20 @@ var createTasteProfile = function(client, request) {
       userMap[phone] = { "tasteProfileId" : json.response.status.id };
       console.log(JSON.stringify(userMap));
       console.log("Created a taste profile for " + phone);
-      updateTasteProfile(phone, testGenres);
 
       client.sendMessage({
         to: phone,
         from: process.env.TWILIO_NUMBER,
-        body: "Welcome to Uncharted!",
-        mediaUrl: "http://cdn.gifbay.com/2012/11/cosplay_wacky_waving_inflatable_arm_flailing_tube_man-12517.gif"
+        body: "Welcome to Uncharted, your personal music assistant! Type \"Commands\" for a list of commands.",
       }, function(err, messageData) {
+        console.log(messageData);
         if (err) {
           console.log(err);
         } else {
           console.log("Successfully welcomed " + phone);
         }
-      })
+      });
+      updateTasteProfile(phone, testGenres);
     }
   });
 };
