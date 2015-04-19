@@ -3,6 +3,8 @@ var RANDY = "+19143258424";
 var BRIAN = "+13016414902";
 
 var dialects = require('./dialects.json');
+var format = require('string-format');
+format.extend(String.prototype)
 
 var echojs = require('echojs');
 
@@ -60,7 +62,7 @@ var getArtistBySongName = function(client, request) {
 
       client.sendMessage({
         to: request.From,
-        body: dialects.normal.haveYouHeardSong.format(artistName, songName),
+        body: dialects.normal.whoSings.format(artistName, songName),
         from: process.env.TWILIO_NUMBER
       }, function(err, messageData) {
         if (err) {
