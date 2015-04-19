@@ -96,7 +96,7 @@ var sendWelcomeMessage = function(client, request) {
         to: request.From,
         body: "Welcome to Uncharted!\n" +
               "We're sending your first recommendation now." +
-              "Send 'recommend' to get more!"
+              "Send 'recommend' to get more!",
         from: process.env.TWILIO_NUMBER
     }, function(err, messageData) {
         if (err) {

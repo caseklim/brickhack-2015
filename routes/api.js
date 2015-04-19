@@ -6,6 +6,9 @@ var conn = mongoose.connection;
 var accountSid = process.env.TWILIO_ACCOUNT_SID;
 var authToken = process.env.TWILIO_AUTH_TOKEN;
 
+var twilio = require('twilio'); 
+var request = require('request');
+
 // A Twilio number you control - choose one from:
 // https://www.twilio.com/user/account/phone-numbers/incoming
 // Specify in E.164 format, e.g. "+16519998877"
@@ -115,6 +118,22 @@ exports.create = function(req, res) {
             */
             
             // res.redirect('/sign-up/finish');
+
+            var client = new twilio.RestClient(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+            client.sendMessage({
+                to: doc.phone,
+                body: "Welcome to Uncharted!\n" +
+                      "We're sending your first recommendation now." +
+                      "Send 'recommend' to get more!",
+                from: process.env.TWILIO_NUMBER
+            }, function(err, messageData) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("Sent welcome");
+                }
+            });
+
             var response = {
                 status: 200,
                 success: ''
