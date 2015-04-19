@@ -3,6 +3,7 @@
   "dependencies" : {
     "twilio" : "*",
     "express" : "*",
-    "body-parser" : "*"
+    "body-parser" : "*",
+    "echojs" : "*"
   }
 }

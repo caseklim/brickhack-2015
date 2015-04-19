@@ -15,7 +15,7 @@ app.post("/sms/", function(req, res) {
   var client = new twilio.RestClient(process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_AUTH_TOKEN);
 
-  console.log(parseRequest(client, req.body));
+  parseRequest(client, req.body);
 });
 
 var server = app.listen(3000, function () {
