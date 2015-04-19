@@ -6,6 +6,7 @@
     "body-parser" : "*",
     "echojs" : "*",
     "mongoose" : "*",
-    "string-format" : "*"
+    "string-format" : "*",
+    "authy" : "*"
   }
 }

@@ -32,7 +32,8 @@ app.get('/', routes.index);
 app.get('/partials/:name', routes.partials);
 
 // Configure queries to the database
-// app.get('/apk', api.getApk);
+app.post('/users', api.create);
+app.post('/verify', api.verify);
 
 // Redirect all others to the index (HTML5 history)
 app.get('*', routes.index);
