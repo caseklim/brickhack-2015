@@ -19,7 +19,7 @@ var twilioClient = require('twilio')(accountSid, authToken);
 var User = require('../models/User');
 
 exports.getUser = function(req, res) {
-   User.findOne({ 'phone' : phoneString});
+   User.findOne({ 'phone' : req.params.phone });
 };
 
 exports.create = function(req, res) {
