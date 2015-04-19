@@ -17,7 +17,7 @@ String.prototype.contains = function(s) {
   return this.toLowerCase().indexOf(s.toLowerCase()) != -1;
 };
 
-var testGenres = ["a cappella", "college a cappella"];
+var testGenres = ["a cappella", "acoustic pop", "classic rock", "hip hop"];
 var userMap = {};
 var ADVENTUROUSNESS = 1;
 
@@ -107,7 +107,6 @@ var sendWelcomeMessage = function(client, request) {
         body: "Welcome to Uncharted!\n" +
               "We're sending your first recommendation now. " +
               "Send 'recommend' to get more!",
-        mediaUrl: "http://stream1.gifsoup.com/view8/20150417/5198682/ha-got-em-o.gif",
         from: process.env.TWILIO_NUMBER
     }, function(err, messageData) {
         if (err) {
