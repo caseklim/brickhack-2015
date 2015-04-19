@@ -6,7 +6,7 @@
         "whoSings"         : [
                                  "{0} sings {1}!"
                              ],
-        "thanks"           : [
+        "welcome"          : [
                                 "Sure thing!",
                                 "Anytime!",
                                 "Glad to help!"
@@ -22,7 +22,22 @@
                                  "I dunno man, maybe {0} sings {1}?",
                                  "How could you not know bruh?? {0} sings {1}!"
                              ],
-        "thanks"           : [
+        "welcome"          : [
+                                "No problem man",
+                                "Yee brah no probs"
+                             ]
+    },
+    "annoying" : {
+        "haveYouHeardSong" : [
+                                "tots check out {0} by {1}. {2}",
+                                "u heard {0} by {1}? pretty sw33t {2}"
+                             ],
+        "whoSings"         : [
+                                 "ermmm {0} tots rox {1}",
+                                 " {0} sings {1}?",
+                                 "How could you not know bruh?? {0} sings {1}!"
+                             ],
+        "welcome"          : [
                                 "No problem man",
                                 "Yee brah no probs"
                              ]
