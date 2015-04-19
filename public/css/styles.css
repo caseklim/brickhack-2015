@@ -69,9 +69,14 @@ a:active {
 
 .text-vertical-center h1 {
     margin: 0;
-    padding: 0;
-    font-size: 4.5em;
+    padding: 15px;
+    font-size: 4em;
     font-weight: 700;
+}
+
+.text-vertical-center p.lead {
+    font-size: 2.5em;
+    margin-top: 15px;
 }
 
 /* Custom Button Styles */
@@ -217,10 +222,16 @@ hr.small {
 
 .services {
     padding: 50px 0;
+    background-color: #00b1d2;
+    color: white;
 }
 
 .service-item {
     margin-bottom: 30px;
+}
+
+.service-item .fa-stack-1x {
+    color: #00b1d2;
 }
 
 /* Callout */
@@ -228,9 +239,11 @@ hr.small {
 .callout {
     display: table;
     width: 100%;
-    height: 400px;
+    height: 350px;
     color: #fff;
-    background: url(../img/callout.jpg) no-repeat center center scroll;
+    /* background: url(../img/callout.jpg) no-repeat center center scroll; */
+    background-color: #e2f2f2;
+    color: #7B93A3;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -241,6 +254,12 @@ hr.small {
 
 .portfolio {
     padding: 50px 0;
+}
+
+.portfolio .sign-up-button {
+    font-size: 36px;
+    font-weight: 300;
+    padding: 16px 22px;
 }
 
 .portfolio-item {
