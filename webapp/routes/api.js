@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
-mongoose.connect('129.21.114.52:27017');
+//mongoose.connect('129.21.114.52:27017');
 
-var conn = mongoose.connection;
+//var conn = mongoose.connection;
 
 var accountSid = process.env.TWILIO_ACCOUNT_SID;
 var authToken = process.env.TWILIO_AUTH_TOKEN;

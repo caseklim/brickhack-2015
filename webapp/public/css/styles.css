@@ -27,6 +27,12 @@ input.form-control {
     font-weight: 300;
 }
 
+.dropdown-menu {
+    width: 250px;
+    height: 332px;
+    overflow: scroll;
+}
+
 .dropdown-menu > li > a {
     font-size: 24px;
     font-weight: 300;
