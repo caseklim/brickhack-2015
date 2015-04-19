@@ -10,11 +10,6 @@ function RegistrationController($scope, $location, appService) {
 
 	$scope.submitted = false;
 
-	$scope.credentials = {
-		email: null,
-		password: null
-	};
-
 	$scope.signUp = function (form) {
         $scope.submitted = true;
 
@@ -27,7 +22,7 @@ function RegistrationController($scope, $location, appService) {
             return;
         }
 
-        if ($scope.credentials.email == 'cklimkowsky@gmail.com') {
+        if ($scope.newUserCredentials.email == 'cklimkowsky@gmail.com') {
         	$scope.message = 'That email address is already in use.';
         	return;
         } else {
@@ -35,6 +30,15 @@ function RegistrationController($scope, $location, appService) {
         }
 
         $location.path('/sign-up/mobile-number');
+	};
+
+	//
+	// Mobile phone
+	//
+
+	$scope.savePhoneNumber = function () {
+		newUserCredentials.phoneNumber = $scope.phoneNumber;
+		$location.path('/sign-up/music-preferences');
 	};
 
 	//
@@ -63,4 +67,12 @@ function RegistrationController($scope, $location, appService) {
 			}
 		};
 	};
+
+	$scope.finishRegistration = function () {
+		$scope.newUserCredentials.genres = $scope.selectedGenres;
+
+		console.log($scope.newUserCredentials);
+
+		$location.path('/sign-up/finish');
+	}
 }
