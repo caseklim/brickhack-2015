@@ -25,6 +25,8 @@ var parseRequest = function(client, request) {
     sendCommands(client, request);
   else if (body.contains("who sings ") != -1)
     getArtistBySongName(client, request);
+  else if (body.contains("recommend"))
+    getRecommendation(client, request);
   else
     echoText(client, request);
 };
@@ -60,6 +62,10 @@ var getArtistBySongName = function(client, request) {
       console.log(json.response);
     });
 };
+
+var getRecommendation = function(client, request) {
+    
+}
 
 // Echos what the user sent for testing purposes
 var echoText = function(client, request) {
