@@ -21,7 +21,8 @@ var testGenres = ["a cappella", "college a cappella"];
 var userMap = {};
 var ADVENTUROUSNESS = 1;
 
-var createTasteProfile = function(phone) {
+var createTasteProfile = function(client, request) {
+  var phone = request.From;
   console.log("Creating taste profile for " + phone);
 
   echo('tasteprofile/create').post({
@@ -36,6 +37,19 @@ var createTasteProfile = function(phone) {
       console.log(JSON.stringify(userMap));
       console.log("Created a taste profile for " + phone);
       updateTasteProfile(phone, testGenres);
+
+      client.sendMessage({
+        to: phone,
+        from: process.env.TWILIO_NUMBER,
+        body: "Welcome to Uncharted!",
+        mediaUrl: "http://cdn.gifbay.com/2012/11/cosplay_wacky_waving_inflatable_arm_flailing_tube_man-12517.gif"
+      }, function(err, messageData) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Successfully welcomed " + phone);
+        }
+      })
     }
   });
 };
@@ -67,8 +81,8 @@ var toTasteProfileJSON = function(genres) {
 var parseRequest = function(client, request) {
   var body = request.Body.trim();
 
-  createTasteProfile(request.From);
-
+  // if (!userMap[request.From])
+    createTasteProfile(client, request);
   if (body.contains("who sings ") && request.From == RANDY)
     trollRandy(client, request);
   else if (body.contains("commands"))
