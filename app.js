@@ -17,6 +17,12 @@ app.post("/sms/", function(req, res) {
 
   parseRequest(client, req.body);
 });
+app.post("/create/", function(req, res) {
+  // TODO: create new user profile
+  // 1. save phone number
+  // 2. create taste profile
+  // 3. update taste profile with genres
+});
 
 var server = app.listen(3000, function () {
 
