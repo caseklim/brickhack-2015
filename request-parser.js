@@ -34,21 +34,10 @@ var createTasteProfile = function(client, request) {
     } else {
       console.log("Json: " + JSON.stringify(json.response.status));
       userMap[phone] = { "tasteProfileId" : json.response.status.id };
+      userMap[phone].dialect = "normal";
       console.log(JSON.stringify(userMap));
       console.log("Created a taste profile for " + phone);
 
-      client.sendMessage({
-        to: phone,
-        from: process.env.TWILIO_NUMBER,
-        body: "Welcome to Uncharted, your personal music assistant! Type \"Commands\" for a list of commands.",
-      }, function(err, messageData) {
-        console.log(messageData);
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("Successfully welcomed " + phone);
-        }
-      });
       updateTasteProfile(phone, testGenres);
     }
   });
@@ -78,21 +67,87 @@ var toTasteProfileJSON = function(genres) {
 };
 
 // This is the entry point for all SMS requests
-var parseRequest = function(client, request) {
+var parseRequest = function(client, request, firstTime) {
+  if (firstTime) {
+      sendWelcomeMessage(client, request);
+      return;
+  }
+
   var body = request.Body.trim();
 
-  // if (!userMap[request.From])
+  if (!userMap[request.From]) {
     createTasteProfile(client, request);
-  // if (body.contains("who sings ") && request.From == RANDY)
-  //   trollRandy(client, request);
-  // else if (body.contains("commands"))
-  //   sendCommands(client, request);
-  // else if (body.contains("who sings "))
-  //   getArtistBySongName(client, request);
-  // else if (body.contains("recommend"))
-  //   getRecommendation(client, request);
+    sendWelcomeMessage(client, request);
+  }
+  if (body.contains("who sings ") && request.From == RANDY)
+    trollRandy(client, request);
+  else if (body.contains("commands"))
+    sendCommands(client, request);
+  else if (body.contains("who sings "))
+    getArtistBySongName(client, request);
+  else if (body.contains("recommend"))
+    getRecommendation(client, request);
+  // else if (body.contains("love") || body.contains("like"))
+  //   sendSongLike(client, request);
+  // else if (body.contains("hate") || body.contains("dislike"))
+  //   sendSongDislike(client, request);
+  else if (body.contains("speak"))
+    setDialect(client, request);
+  // else if (body.contains("can't open"))
+  //   setLinkStyle(client, request);
+  else if (body.contains("thank"))
+    sendYoureWelcome(client, request);
   // else
   //   echoText(client, request);
+};
+
+var sendWelcomeMessage = function(client, request) {
+    client.sendMessage({
+        to: request.From,
+        body: "Welcome to Uncharted!\n" +
+              "We're sending your first recommendation now. " +
+              "Send 'recommend' to get more!",
+        mediaUrl: "http://stream1.gifsoup.com/view8/20150417/5198682/ha-got-em-o.gif",
+        from: process.env.TWILIO_NUMBER
+    }, function(err, messageData) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Sent welcome");
+            getRecommendation(client, request);
+        }
+    });
+};
+
+var setDialect = function(client, request) {
+    var dialect = request.Body.replace("Speak ", "").trim();
+    userMap[request.From].dialect = dialect;
+
+    client.sendMessage({
+        to: request.From,
+        body: getPhrase(dialect,"switch"),
+        from: process.env.TWILIO_NUMBER
+    }, function(err, messageData) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Sent you're welcome");
+        }
+    });
+};
+
+var sendYoureWelcome = function(client, request) {
+    client.sendMessage({
+        to: request.From,
+        body: getPhrase(userMap[request.From].dialect,"welcome"),
+        from: process.env.TWILIO_NUMBER
+    }, function(err, messageData) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Sent you're welcome");
+        }
+    });
 };
 
 // A proof-of-concept for connecting all of our APIs
@@ -112,7 +167,7 @@ var getArtistBySongName = function(client, request) {
 
       client.sendMessage({
         to: request.From,
-        body: getPhrase("brah","whoSings").format(artistName, songName),
+        body: getPhrase(userMap[request.From].dialect,"whoSings").format(artistName, songName),
         from: process.env.TWILIO_NUMBER
       }, function(err, messageData) {
         if (err) {
@@ -159,7 +214,7 @@ var getRecommendation = function(client, request) {
       client.sendMessage({
         to: request.From,
         from: process.env.TWILIO_NUMBER,
-        body: getPhrase("brah","haveYouHeardSong").format(song)
+        body: getPhrase(userMap[request.From].dialect,"haveYouHeardSong").format(song)
       }, function(err, messageData) {
         if (err) {
           console.log(err);
@@ -191,7 +246,12 @@ var sendCommands = function(client, request) {
   client.sendMessage({
     to: request.From,
     from: process.env.TWILIO_NUMBER,
-    body: "Who sings [song name]: tells you who sings a song"
+    body: "'Who sings [song name]?'': tells you who sings a song\n" +
+          "'Recommend a song': Recommends a song based on your profile\n" +
+          "'I loved it': Let us know that you liked a recommendation.\n" +
+          "'I hated it': Let us know that you disliked a recommendation.\n" +
+          "'Speak [dialect]': Tell Uncharted how to talk to you.\n" +
+          "'I can't open that link': Switch link style (for Android users)"
   }, function(err, messageData) {
     if (err) {
       console.log(err);
