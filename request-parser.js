@@ -17,11 +17,12 @@ String.prototype.contains = function(s) {
   return this.toLowerCase().indexOf(s.toLowerCase()) != -1;
 };
 
-var testGenres = ["a cappella", "college a cappella"];
+var testGenres = ["a cappella", "acoustic pop", "classic rock", "hip hop"];
 var userMap = {};
 var ADVENTUROUSNESS = 1;
 
-var createTasteProfile = function(phone) {
+var createTasteProfile = function(client, request) {
+  var phone = request.From;
   console.log("Creating taste profile for " + phone);
 
   echo('tasteprofile/create').post({
@@ -33,8 +34,10 @@ var createTasteProfile = function(phone) {
     } else {
       console.log("Json: " + JSON.stringify(json.response.status));
       userMap[phone] = { "tasteProfileId" : json.response.status.id };
+      userMap[phone].dialect = "normal";
       console.log(JSON.stringify(userMap));
       console.log("Created a taste profile for " + phone);
+
       updateTasteProfile(phone, testGenres);
     }
   });
@@ -64,11 +67,18 @@ var toTasteProfileJSON = function(genres) {
 };
 
 // This is the entry point for all SMS requests
-var parseRequest = function(client, request) {
+var parseRequest = function(client, request, firstTime) {
+  if (firstTime) {
+      sendWelcomeMessage(client, request);
+      return;
+  }
+
   var body = request.Body.trim();
 
-  createTasteProfile(request.From);
-
+  if (!userMap[request.From]) {
+    createTasteProfile(client, request);
+    sendWelcomeMessage(client, request);
+  }
   if (body.contains("who sings ") && request.From == RANDY)
     trollRandy(client, request);
   else if (body.contains("commands"))
@@ -87,15 +97,15 @@ var parseRequest = function(client, request) {
   //   setLinkStyle(client, request);
   else if (body.contains("thank"))
     sendYoureWelcome(client, request);
-  else
-    echoText(client, request);
+  // else
+  //   echoText(client, request);
 };
 
 var sendWelcomeMessage = function(client, request) {
     client.sendMessage({
         to: request.From,
         body: "Welcome to Uncharted!\n" +
-              "We're sending your first recommendation now." +
+              "We're sending your first recommendation now. " +
               "Send 'recommend' to get more!",
         from: process.env.TWILIO_NUMBER
     }, function(err, messageData) {
@@ -103,12 +113,15 @@ var sendWelcomeMessage = function(client, request) {
             console.log(err);
         } else {
             console.log("Sent welcome");
+            getRecommendation(client, request);
         }
     });
 };
 
 var setDialect = function(client, request) {
     var dialect = request.Body.replace("Speak ", "").trim();
+    userMap[request.From].dialect = dialect;
+
     client.sendMessage({
         to: request.From,
         body: getPhrase(dialect,"switch"),
@@ -125,7 +138,7 @@ var setDialect = function(client, request) {
 var sendYoureWelcome = function(client, request) {
     client.sendMessage({
         to: request.From,
-        body: getPhrase("brah","welcome"),
+        body: getPhrase(userMap[request.From].dialect,"welcome"),
         from: process.env.TWILIO_NUMBER
     }, function(err, messageData) {
         if (err) {
@@ -153,7 +166,7 @@ var getArtistBySongName = function(client, request) {
 
       client.sendMessage({
         to: request.From,
-        body: getPhrase("brah","whoSings").format(artistName, songName),
+        body: getPhrase(userMap[request.From].dialect,"whoSings").format(artistName, songName),
         from: process.env.TWILIO_NUMBER
       }, function(err, messageData) {
         if (err) {
@@ -200,7 +213,7 @@ var getRecommendation = function(client, request) {
       client.sendMessage({
         to: request.From,
         from: process.env.TWILIO_NUMBER,
-        body: getPhrase("brah","haveYouHeardSong").format(song)
+        body: getPhrase(userMap[request.From].dialect,"haveYouHeardSong").format(song)
       }, function(err, messageData) {
         if (err) {
           console.log(err);
