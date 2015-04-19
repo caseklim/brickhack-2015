@@ -10,9 +10,9 @@ var echonest = function() {
     });
 
     var options = {
-      hostname: 'http://developer.echonest.com/api/v4',
+      hostname: 'developer.echonest.com',
       port: 80,
-      path: '/song/search',
+      path: '/api/v4/song/search',
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
