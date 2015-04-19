@@ -49,7 +49,7 @@ var getArtistBySongName = function(client, request) {
 
       client.sendMessage({
         to: request.From,
-        body: dialects.normal.whoSings.format(artistName, songName),
+        body: getPhrase("brah","whoSings").format(artistName, songName),
         from: process.env.TWILIO_NUMBER
       }, function(err, messageData) {
         if (err) {
@@ -64,7 +64,7 @@ var getArtistBySongName = function(client, request) {
 };
 
 var getRecommendation = function(client, request) {
-    
+
 }
 
 // Echos what the user sent for testing purposes
@@ -110,5 +110,13 @@ var trollRandy = function(client, request) {
     }
   });
 };
+
+var getPhrase = function(dialect,phrase) {
+    var p = dialects[dialect][phrase];
+    var randPhraseIdx = randInt(0,p.length);
+    return p[randPhraseIdx];
+}
+
+function randInt(low, high) { return Math.floor(Math.random() * high) + low }
 
 module.exports = parseRequest;
