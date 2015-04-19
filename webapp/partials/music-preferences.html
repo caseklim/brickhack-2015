@@ -24,13 +24,17 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search for a genre">
+                <input type="text" class="form-control" typeahead="genre as genre.name for genre in genres | filter:{name:$viewValue} | limitTo:8" 
+                  typeahead-on-select="onGenreSelect($item, $model, $label)" placeholder="Search for a genre..." data-ng-model="selectedGenre">
               </div>
-              <!--<p class="lead">Selected Genres: None yet!</p>-->
-              <p class="lead">Selected Genres:</p>
-              <h2 class="music-labels">
-                <span class="label label-info">Pop <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></span>
-                <span class="label label-warning">Indie <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></span>
+              <p class="lead" data-ng-if="selectedGenres.length == 0">Selected Genres: None yet!</p>
+              <p class="lead" data-ng-if="selectedGenres.length > 0">Selected Genres:</p>
+              <h2 class="music-labels" data-ng-if="selectedGenres.length > 0">
+                <span data-ng-repeat="genre in selectedGenres" class="label label-info">{{ genre.name }} 
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-ng-click="removeGenre(genre)">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </span>
               </h2>
               <button type="submit" class="btn btn-lg btn-primary sign-up-button">Finish</button>
           </div>

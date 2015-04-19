@@ -1,9 +1,8 @@
 angular
-    .module('brickhack', ['ngRoute'])
+    .module('brickhack', ['ngRoute', 'ui.bootstrap'])
     .config(config);
 
 function config($routeProvider) {
-    console.log('test');
     $routeProvider
         .when('/', {
             templateUrl: 'partials/home.html',
@@ -11,19 +10,23 @@ function config($routeProvider) {
         })
         .when('/sign-up/basic', {
             templateUrl: 'partials/sign-up.html',
-            controller: 'ApplicationController'
+            controller: 'RegistrationController'
         })
         .when('/sign-up/mobile-number', {
             templateUrl: 'partials/mobile-number.html',
-            controller: 'ApplicationController'
+            controller: 'RegistrationController'
         })
         .when('/sign-up/music-preferences', {
             templateUrl: 'partials/music-preferences.html',
-            controller: 'ApplicationController'
+            controller: 'RegistrationController'
+        })
+        .when('/sign-up/finish', {
+            templateUrl: 'partials/finish.html',
+            controller: 'RegistrationController'
         })
         .when('/sign-in', {
             templateUrl: 'partials/sign-in.html',
-            controller: 'ApplicationController'
+            controller: 'LoginController'
         })
         .otherwise({
             redirectTo: '/'

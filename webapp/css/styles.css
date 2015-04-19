@@ -22,6 +22,19 @@ input.form-control {
     border-radius: 0;
 }
 
+.alert {
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.dropdown-menu > li > a {
+    font-size: 24px;
+    font-weight: 300;
+}
+.dropdown-menu > li > a > strong {
+    font-weight: 300;
+}
+
 .close {
     float: none;
 }
@@ -286,4 +299,5 @@ header.sign-up {
 
 .music-labels span {
     margin: 5px;
+    font-weight: 400;
 }
