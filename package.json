@@ -5,6 +5,7 @@
     "express" : "*",
     "body-parser" : "*",
     "echojs" : "*",
-    "mongoose" : "*"
+    "mongoose" : "*",
+    "string-format" : "*"
   }
 }
