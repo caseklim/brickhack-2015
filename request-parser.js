@@ -39,7 +39,9 @@ var getSongInfo = function(client, request) {
 
     // http://developer.echonest.com/docs/v4/song.html#search
     echo('song/search').get({
-      title: songName
+      title: songName,
+      results: 1,
+      sort: "artist_familiarity-desc"
     }, function (err, json) {
       var songs = json.response.songs;
 
