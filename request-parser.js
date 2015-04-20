@@ -13,8 +13,16 @@ var echo = echojs({
 
 var requestLib = require('request');
 
+// Can take either a string or an array of strings to compare against
 String.prototype.contains = function(s) {
-  return this.toLowerCase().indexOf(s.toLowerCase()) != -1;
+  if (typeof s === "string")
+    return this.toLowerCase().indexOf(s.toLowerCase()) != -1;
+
+  for (var i = 0; i < s.length; i++)
+    if (this.contains(s[i]))
+      return true;
+
+  return false;
 };
 
 var testGenres = ["a cappella", "acoustic pop", "classic rock", "hip hop"];
@@ -33,7 +41,7 @@ var createTasteProfile = function(client, request) {
       console.log(err);
     } else {
       console.log("Json: " + JSON.stringify(json.response.status));
-      userMap[phone] = { "tasteProfileId" : json.response.status.id };
+      userMap[phone].tasteProfileId = json.response.status.id;
       userMap[phone].dialect = "normal";
       console.log(JSON.stringify(userMap));
       console.log("Created a taste profile for " + phone);
@@ -76,8 +84,9 @@ var parseRequest = function(client, request, firstTime) {
   var body = request.Body.trim();
 
   if (!userMap[request.From]) {
-    createTasteProfile(client, request);
+    userMap[request.From] = {};
     sendWelcomeMessage(client, request);
+    createTasteProfile(client, request);
   }
   if (body.contains("who sings ") && request.From == RANDY)
     trollRandy(client, request);
@@ -85,7 +94,7 @@ var parseRequest = function(client, request, firstTime) {
     sendCommands(client, request);
   else if (body.contains("who sings "))
     getArtistBySongName(client, request);
-  else if (body.contains("recommend"))
+  else if (body.contains(["recommend", "song me", "suggest", "give me a song"]))
     getRecommendation(client, request);
   // else if (body.contains("love") || body.contains("like"))
   //   sendSongLike(client, request);
@@ -93,8 +102,8 @@ var parseRequest = function(client, request, firstTime) {
   //   sendSongDislike(client, request);
   else if (body.contains("speak"))
     setDialect(client, request);
-  // else if (body.contains("can't open"))
-  //   setLinkStyle(client, request);
+  else if (body.contains("can't open"))
+    setLinkStyle(client, request);
   else if (body.contains("thank"))
     sendYoureWelcome(client, request);
   // else
@@ -102,6 +111,8 @@ var parseRequest = function(client, request, firstTime) {
 };
 
 var sendWelcomeMessage = function(client, request) {
+    userMap[request.From].usingAppLink = true;
+
     client.sendMessage({
         to: request.From,
         body: "Welcome to Uncharted!\n" +
@@ -208,7 +219,7 @@ var getRecommendation = function(client, request) {
       var json = JSON.parse(body);
       var song = json.response.songs[Math.floor(Math.random() * 4)];
       var songId = song.tracks[0].foreign_id.replace("spotify:track:", "");
-      song.spotifyUrl = 'spotify://track/' + songId;
+      song.spotifyUrl = (userMap[request.From].usingAppLink ? 'spotify://' : 'http://open.spotify.com/') + 'track/' + songId;
 
       client.sendMessage({
         to: request.From,
@@ -246,7 +257,7 @@ var sendCommands = function(client, request) {
     to: request.From,
     from: process.env.TWILIO_NUMBER,
     body: "'Who sings [song name]?'': tells you who sings a song\n" +
-          "'Recommend a song': Recommends a song based on your profile\n" +
+          "'Recommend': Recommends a song based on your profile\n" +
           "'I loved it': Let us know that you liked a recommendation.\n" +
           "'I hated it': Let us know that you disliked a recommendation.\n" +
           "'Speak [dialect]': Tell Uncharted how to talk to you.\n" +
@@ -256,6 +267,25 @@ var sendCommands = function(client, request) {
       console.log(err);
     } else {
       console.log("Help sent! SID: " + messageData.sid);
+    }
+  });
+};
+
+// TODO: read previous messages and resend link in the new format
+
+// Toggles link style between normal web link and app link
+var setLinkStyle = function(client, request) {
+  userMap[request.From].usingAppLink = !userMap[request.From].usingAppLink;
+
+  client.sendMessage({
+    to: request.From,
+    from: process.env.TWILIO_NUMBER,
+    body: getPhrase(userMap[request.From].dialect, "switchLinkStyle")
+  }, function(err, messageData) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Link style switched! SID: " + messageData.sid);
     }
   });
 };
@@ -278,7 +308,7 @@ var getPhrase = function(dialect,phrase) {
     var p = dialects[dialect][phrase];
     var randPhraseIdx = randInt(0,p.length);
     return p[randPhraseIdx];
-}
+};
 
 function randInt(low, high) { return Math.floor(Math.random() * high) + low }
 

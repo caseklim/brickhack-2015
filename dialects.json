@@ -15,6 +15,9 @@
                                 "Thanks for switching!",
                                 "Good choice!",
                                 "Speaking normal to you."
+                             ],
+        "switchLinkStyle"  : [
+                                "Let me fix that for you. Try again now!"
                              ]
     },
     "brah" : {
@@ -35,6 +38,9 @@
                                  "Yooo right onnnn.",
                                  "You picked right brah.",
                                  "You da real mvp."
+                              ],
+         "switchLinkStyle"  : [
+                                 "Cha brah. Give it another go!"
                               ]
     },
     "annoying" : {
@@ -55,6 +61,9 @@
                                  "lol gr8 choice",
                                  "mmmmk i guess i can help u",
                                  "urgh id rather not talk 2 u but i guess"
+                              ],
+         "switchLinkStyle"  : [
+                                 "OMGMYBFFJILL! It's totes fixed now :P"
                               ]
     }
 }
