@@ -3,7 +3,7 @@
  */
 
 var express         = require('express'),
-    // routes          = require('./routes'),
+    routes          = require('./routes'),
     // api             = require('./routes/api'),
     http            = require('http'),
     path            = require('path'),
@@ -33,8 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
  */
 
 // Serve index and view partials
-// app.get('/', routes.index);
-// app.get('/partials/:name', routes.partials);
+app.get('/', routes.index);
+app.get('/partials/:name', routes.partials);
 
 // Configure queries to the database
 // app.post('/users', api.create);
@@ -49,7 +49,7 @@ app.post("/sms", function(req, res) {
 });
 
 // Redirect all others to the index (HTML5 history)
-// app.get('*', routes.index);
+app.get('*', routes.index);
 
 
 /**

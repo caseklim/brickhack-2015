@@ -54,6 +54,10 @@ input.form-control {
 
 /* Misc. Custom Styles */
 
+.main-content {
+    height: 100%;
+}
+
 .logo {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -77,21 +81,6 @@ input.form-control {
     margin-top: 15px;
 }
 
-/* Custom Button Styles */
-
-.btn-light {
-    border-radius: 0;
-    color: #333;
-    background-color: rgb(255, 255, 255);
-}
-
-.btn-light:hover,
-.btn-light:focus,
-.btn-light:active {
-    color: #333;
-    background-color: rgba(255, 255, 255, 0.8);
-}
-
 /* Custom Horizontal Rule */
 
 hr.small {
@@ -105,21 +94,21 @@ hr.small {
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     text-transform: uppercase;
     font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background-color: #000;
+    background-color: white;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+.navbar-custom a {
+    color: #333;
 }
 
 .navbar-custom .navbar-brand {
     font-weight: 700;
+    padding-top: 19px;
 }
 
 .navbar-custom .navbar-brand:focus {
     outline: 0;
-}
-
-.navbar-custom .navbar-brand .navbar-toggle {
-    padding: 4px 6px;
-    font-size: 16px;
-    color: #fff;
 }
 
 .navbar-custom .navbar-brand .navbar-toggle:focus,
@@ -127,8 +116,16 @@ hr.small {
     outline: 0;
 }
 
-.navbar-custom a {
+.navbar-custom button.navbar-toggle {
     color: #fff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+    padding: 9px 13px;
+}
+
+.navbar-custom button.navbar-toggle:hover {
+    background-color: #31b0d5;
+    border-color: #269abc;
 }
 
 .navbar-custom .nav li a {
@@ -139,7 +136,6 @@ hr.small {
 
 .navbar-custom .nav li a:hover {
     outline: 0;
-    color: rgba(255, 255, 255, 0.8);
     background-color: transparent;
 }
 
@@ -149,27 +145,24 @@ hr.small {
     background-color: transparent;
 }
 
-.navbar-custom .nav li.active {
-    outline: 0;
-}
-
-.navbar-custom .nav li.active a {
-    background-color: rgba(255, 255, 255, 0.3);
-}
-
-.navbar-custom .nav li.active a:hover {
-    color: #fff;
-}
-
 @media(min-width:768px) {
     .navbar-custom {
         padding: 20px 0;
         border-bottom: 0;
         letter-spacing: 1px;
         background: 0 0;
+        background-color: transparent;
         -webkit-transition: background .5s ease-in-out,padding .5s ease-in-out;
         -moz-transition: background .5s ease-in-out,padding .5s ease-in-out;
         transition: background .5s ease-in-out,padding .5s ease-in-out;
+    }
+
+    .navbar-custom .navbar-brand {
+        padding-top: 15px;
+    }
+
+    .navbar-custom a {
+        color: #fff;
     }
 
     .navbar-custom.top-nav-collapse {
